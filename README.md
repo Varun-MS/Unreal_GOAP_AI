@@ -1,37 +1,11 @@
-## Welcome to GitHub Pages
+# SimpleFPSTemplate
+Simple C++ FPS Template for Unreal Engine 4
 
-You can use the [editor on GitHub](https://github.com/Varun-MS/Unreal_GOAP_AI/edit/master/README.md) to maintain and preview the content for your website in Markdown files.
+Last updated for 4.20
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+# Why create a "simplified" FPS C++ Template?
+The provided C++ template that ships with the engine has several features that someone new to C++ may not be interested in like VR controls and Touch input. This code "bloats" the template to look a lot more complex than neccessary if you are simply looking to start with C++ in UE4. I'm using this project to create tutorials and you can use it in your own way!
 
-### Markdown
+![alt text](https://www.tomlooman.com/wp-content/uploads/2017/09/Thumb_FPSTemplate2.jpg)
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
-
-```markdown
-Syntax highlighted code block
-
-# Header 1
-## Header 2
-### Header 3
-
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
-```
-
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/Varun-MS/Unreal_GOAP_AI/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://help.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
+This project is licensed under the Unreal Engine 4 EULA.
