@@ -2,6 +2,11 @@
 
 #include "ActionManager.h"
 
+// Predicate function for sorting
+bool SortByPriority(const UActionTest & lhs, const UActionTest & rhs)
+{
+	return (lhs < rhs);
+}
 
 // Sets default values for this component's properties
 UActionManager::UActionManager()
@@ -11,8 +16,8 @@ UActionManager::UActionManager()
 	PrimaryComponentTick.bCanEverTick = true;
 
 	// ...
-	pendingQueue.Heapify();
-	activeQueue.Heapify();
+	pendingQueue.Heapify(SortByPriority);
+	activeQueue.Heapify(SortByPriority);
 }
 
 
@@ -22,7 +27,7 @@ void UActionManager::ScheduleAction(UActionTest* Action)
 
 	if (pendingQueue.Num() == 0)
 	{
-		pendingQueue.HeapPush(Action);
+		pendingQueue.HeapPush(Action, SortByPriority);
 		return;
 	}
 
@@ -33,13 +38,13 @@ void UActionManager::ScheduleAction(UActionTest* Action)
 			pendingQueue.RemoveSingle(action);
 
 			pendingQueue.Push(Action);
-			pendingQueue.Heapify();
+			pendingQueue.Heapify(SortByPriority);
 
 			return;
 		}
 	}
 
-	pendingQueue.HeapPush(Action);
+	pendingQueue.HeapPush(Action, SortByPriority);
 
 }
 
@@ -92,11 +97,11 @@ void UActionManager::Update(float DeltaTime)
 		{
 			// Clear active queue and push this action onto it
 			activeQueue.Empty();
-			activeQueue.HeapPush(action);
+			activeQueue.HeapPush(action, SortByPriority);
 
 			// Remove action from pending queue
 			pendingQueue.RemoveSingle(action);
-			pendingQueue.Heapify();
+			pendingQueue.Heapify(SortByPriority);
 
 			// Break because no other action in the pending queue can be of a higher priority
 			break;
@@ -123,7 +128,7 @@ void UActionManager::Update(float DeltaTime)
 			pendingQueue.RemoveAt(i, 1, false);
 	}
 
-	pendingQueue.Heapify();
+	pendingQueue.Heapify(SortByPriority);
 
 	//////
 	// Cleanup on active queue
@@ -134,6 +139,6 @@ void UActionManager::Update(float DeltaTime)
 			activeQueue.RemoveAt(i, 1, false);
 	}
 
-	activeQueue.Heapify();
+	activeQueue.Heapify(SortByPriority);
 }
 

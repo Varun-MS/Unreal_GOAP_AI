@@ -51,6 +51,8 @@ protected:
 bool operator < (const UActionTest &lhs, const UActionTest &rhs);
 bool operator <= (const UActionTest &lhs, const UActionTest &rhs);
 
+//bool operator () (const UActionTest &lhs, const UActionTest &rhs);
+
 bool operator > (const UActionTest &lhs, const UActionTest &rhs);
 bool operator >= (const UActionTest &lhs, const UActionTest &rhs);
 
