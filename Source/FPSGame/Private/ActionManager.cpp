@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "ActionManager.h"
+#include "UActionTest.h"
 
 // Predicate function for sorting
 bool SortByPriority(const UActionTest & lhs, const UActionTest & rhs)
