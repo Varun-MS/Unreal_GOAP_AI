@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "UObject.h"
+#include "Object.h"
 #include "WorldState.h"
 #include "NodeRecord.h"
 
