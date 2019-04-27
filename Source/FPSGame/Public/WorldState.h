@@ -10,29 +10,34 @@
 /**
  * 
  */
-UCLASS()
+UCLASS(Blueprintable)
 class FPSGAME_API UWorldState : public UObject
 {
 	GENERATED_BODY()
 
 public:
+
 	UWorldState();
 	~UWorldState();
 
-	const TMap<uint8_t, bool>& GetWorldStateVariables();
-	
-	void SetHumanReadableName(const FString& i_name);
+	UFUNCTION(BlueprintCallable, Category = "World State")
+	void AddWorldStateVariable(int VariableCode, bool Value);
 
-	bool GetVariableValue(uint8_t i_variableID) const;
-	void SetVariableValue(uint8_t i_variableID, bool i_newValue);
+	UFUNCTION(BlueprintCallable, Category = "World State")
+	void SetName(const FString& Name);
 
-	uint8_t DistanceTo(const UWorldState& i_otherState) const;
+	UFUNCTION(BlueprintCallable, Category = "World State")
+	bool GetWorldStateVariable(int VariableCode);
+
+	UFUNCTION(BlueprintCallable, Category = "World State")
+	FString GetName() { return m_humanReadableName; }
+
+	int DistanceTo(const UWorldState& i_otherState) const;
 
 	bool operator== (const UWorldState& i_rhs) const;
 
-	TMap<uint8_t, bool> m_worldStateVariables;
+private:
+	TMap<int, bool> m_worldStateVariables;
 
-protected:
-	float m_priority;
 	FString m_humanReadableName;
 };

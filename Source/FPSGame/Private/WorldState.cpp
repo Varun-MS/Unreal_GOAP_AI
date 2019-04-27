@@ -8,31 +8,32 @@ UWorldState::UWorldState()
 UWorldState::~UWorldState()
 {}
 
-const TMap<uint8_t, bool>& UWorldState::GetWorldStateVariables()
+void UWorldState::AddWorldStateVariable(int VariableCode, bool Value)
 {
-	return m_worldStateVariables;
+	m_worldStateVariables.Add(VariableCode, Value);
 }
 
-void UWorldState::SetHumanReadableName(const FString& i_name)
+void UWorldState::SetName(const FString& Name)
 {
-	m_humanReadableName = i_name;
+	m_humanReadableName = Name;
 }
 
-bool UWorldState::GetVariableValue(uint8_t i_variableID) const
+bool UWorldState::GetWorldStateVariable(int VariableCode)
 {
-	return *(m_worldStateVariables.Find(i_variableID));
+	auto result = m_worldStateVariables.Find(VariableCode);
+
+	if (result == nullptr)
+		return false;
+
+	else
+		return *result;
 }
 
-void UWorldState::SetVariableValue(uint8_t i_variableID, bool i_newValue)
-{
-	m_worldStateVariables.Add(i_variableID, i_newValue);
-}
-
-uint8_t UWorldState::DistanceTo(const UWorldState& i_otherState) const
+int UWorldState::DistanceTo(const UWorldState& i_otherState) const
 {
 	int result = 0;
 
-	for (const auto& keyValuePair : i_otherState.m_worldStateVariables) 
+	for (const auto& keyValuePair : m_worldStateVariables) 
 	{
 		auto lookupResult = m_worldStateVariables.Find(keyValuePair.Key);
 		
