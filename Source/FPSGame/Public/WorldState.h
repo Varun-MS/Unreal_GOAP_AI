@@ -30,14 +30,13 @@ public:
 	bool GetWorldStateVariable(int VariableCode);
 
 	UFUNCTION(BlueprintCallable, Category = "World State")
-	FString GetName() { return m_humanReadableName; }
+	FString GetName() { return HumanReadableName; }
 
 	int DistanceTo(const UWorldState& i_otherState) const;
 
 	bool operator== (const UWorldState& i_rhs) const;
 
-private:
-	TMap<int, bool> m_worldStateVariables;
+	TMap<int, bool> WorldStateVariables;
+	FString HumanReadableName;
 
-	FString m_humanReadableName;
 };

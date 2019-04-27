@@ -10,17 +10,17 @@ UWorldState::~UWorldState()
 
 void UWorldState::AddWorldStateVariable(int VariableCode, bool Value)
 {
-	m_worldStateVariables.Add(VariableCode, Value);
+	WorldStateVariables.Add(VariableCode, Value);
 }
 
 void UWorldState::SetName(const FString& Name)
 {
-	m_humanReadableName = Name;
+	HumanReadableName = Name;
 }
 
 bool UWorldState::GetWorldStateVariable(int VariableCode)
 {
-	auto result = m_worldStateVariables.Find(VariableCode);
+	auto result = WorldStateVariables.Find(VariableCode);
 
 	if (result == nullptr)
 		return false;
@@ -33,9 +33,9 @@ int UWorldState::DistanceTo(const UWorldState& i_otherState) const
 {
 	int result = 0;
 
-	for (const auto& keyValuePair : m_worldStateVariables) 
+	for (const auto& keyValuePair : WorldStateVariables) 
 	{
-		auto lookupResult = m_worldStateVariables.Find(keyValuePair.Key);
+		auto lookupResult = WorldStateVariables.Find(keyValuePair.Key);
 		
 		if (lookupResult == nullptr || *(lookupResult) != keyValuePair.Value) 
 		{
