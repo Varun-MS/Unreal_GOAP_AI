@@ -73,3 +73,4 @@ DerivedDataCache/*
 #Binaries
 Binaries/*
 Binaries/Win64/*
+Binaries/Win64/UE4Editor-FPSGame.dll

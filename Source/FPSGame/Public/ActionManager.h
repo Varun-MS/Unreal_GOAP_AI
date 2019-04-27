@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "AIController.h"
 
 class UActionTest;
 
@@ -21,6 +22,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void ScheduleAction(UActionTest* Action);
 
+	UFUNCTION(BlueprintCallable)
+	void SetAIController(AAIController const * aiController);
+
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
@@ -32,6 +36,8 @@ public:
 private:
 	void Update(float DeltaTime);
 	
+	AAIController const * aiController = NULL;
+
 	TArray<UActionTest*> pendingQueue;
 	TArray<UActionTest*> activeQueue;
 

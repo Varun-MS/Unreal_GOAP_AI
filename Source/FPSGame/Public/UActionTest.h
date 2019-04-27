@@ -13,8 +13,11 @@ enum class EStatusEnum : uint8
 {
 	VE_Valid 	    UMETA(DisplayName = "Valid"),
 	VE_Complete 	UMETA(DisplayName = "Complete"),
+	VE_Running		UMETA(DisplayName = "Running"),
 	VE_Expired	    UMETA(DisplayName = "Expired")
 };
+
+class AAIController;
 
 /**
  * 
@@ -27,10 +30,11 @@ class FPSGAME_API UActionTest : public UObject
 public:
 	UActionTest();
 
-	bool CanInterrupt() const;
-	bool IsComplete() const;
+	inline bool CanInterrupt() const;
+	inline bool IsComplete() const;
+	inline bool IsRunning() const;
 
-	virtual void Execute() {}
+	virtual void Execute(AAIController const * aiController) {}
 
 	/**
 		Compare given world state against precondition,
@@ -42,12 +46,15 @@ public:
 	void ActOn(UWorldState * worldState) const;
 
 	/** Add new precondition element */
+	UFUNCTION(BlueprintCallable)
 	void SetPrecondition(int32 key, bool value);
 
 	/** Add new effect element */
+	UFUNCTION(BlueprintCallable)
 	void SetEffect(int32 key, bool value);
 
 	/** Set the properties that will be used by the action manager */
+	UFUNCTION(BlueprintCallable)
 	void SetActionProperties(int32 priority, int32 id, int32 expiryTime, bool canInterrupt = false, EStatusEnum status = EStatusEnum::VE_Valid);
 
 	inline int32 Cost() const { return cost; }
@@ -69,6 +76,7 @@ public:
 
 protected:
 	bool isComplete;
+	bool isRunning;
 	bool canInterrupt;
 
 private:

@@ -10,14 +10,19 @@ UActionTest::UActionTest()
 	InitializeDefaults();
 }
 
-bool UActionTest::CanInterrupt() const
+inline bool UActionTest::CanInterrupt() const
 {
 	return canInterrupt;
 }
 
-bool UActionTest::IsComplete() const
+inline bool UActionTest::IsComplete() const
 {
 	return isComplete;
+}
+
+inline bool UActionTest::IsRunning() const
+{
+	return isRunning;
 }
 
 bool UActionTest::OperableOn(const UWorldState & worldState)
@@ -70,6 +75,7 @@ void UActionTest::InitializeDefaults()
 	queuedTime = 0.0f;
 	expiryTime = 0.0f;
 	isComplete = false;
+	isRunning = false;
 	canInterrupt = false;
 }
 

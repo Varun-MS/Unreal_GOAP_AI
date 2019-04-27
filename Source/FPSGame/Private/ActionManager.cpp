@@ -49,6 +49,11 @@ void UActionManager::ScheduleAction(UActionTest* Action)
 
 }
 
+void UActionManager::SetAIController(AAIController const * aiController)
+{
+	this->aiController = aiController;
+}
+
 // Called when the game starts
 void UActionManager::BeginPlay()
 {
@@ -117,7 +122,7 @@ void UActionManager::Update(float DeltaTime)
 		if (action->status == EStatusEnum::VE_Complete)
 			continue;
 
-		action->Execute();
+		action->Execute(aiController);
 	}
 
 	//////
