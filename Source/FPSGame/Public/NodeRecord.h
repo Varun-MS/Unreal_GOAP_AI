@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 
 #include "UActionTest.h"
-#include "WorldState.h"
+#include "WorldState_Internal.h"
 /**
  * 
  */
@@ -14,7 +14,7 @@ class FPSGAME_API NodeRecord
 {
 public:
 	NodeRecord();
-	NodeRecord(TWeakObjectPtr<UWorldState> i_pWorldState, TWeakObjectPtr<UActionTest> i_pAction, int i_costSoFar, int i_estimatedCostToTarget, int i_parentID);
+	NodeRecord(const WorldState_Internal& i_worldState, TWeakObjectPtr<UActionTest> i_pAction, int i_costSoFar, int i_estimatedCostToTarget, int i_parentID);
 
 	~NodeRecord();
 
@@ -25,7 +25,7 @@ public:
 	int estimatedCostToTarget;
 
 	TWeakObjectPtr<UActionTest> pAction;
-	TWeakObjectPtr<UWorldState> pWorldState;
+	WorldState_Internal worldState;
 
 	FORCEINLINE int EstimateTotalCost() const { return costSoFar + estimatedCostToTarget; }
 };

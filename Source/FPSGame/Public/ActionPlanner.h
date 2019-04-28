@@ -29,13 +29,13 @@ protected:
 	std::vector<NodeRecord> m_openList;
 	std::vector<NodeRecord> m_closedList;
 
-	std::vector<NodeRecord>::iterator IsContainedInOpenList(TWeakObjectPtr<UWorldState> i_pWorldState);
-	bool IsContainedInClosedList(TWeakObjectPtr<UWorldState> i_pWorldState);
+	std::vector<NodeRecord>::iterator IsContainedInOpenList(WorldState_Internal i_worldState);
+	bool IsContainedInClosedList(WorldState_Internal i_worldState);
 
 	void AddToOpenList(NodeRecord&&);
 	NodeRecord PopAndClose();
 
-	int CalculateHeuristic(TWeakObjectPtr<UWorldState> i_pCurrentState, TWeakObjectPtr<UWorldState> i_pTargetState);
+	int CalculateHeuristic(WorldState_Internal i_currentState, WorldState_Internal i_targetState);
 
 public:	
 	// Called every frame

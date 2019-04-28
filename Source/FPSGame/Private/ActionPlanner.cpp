@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "ActionPlanner.h"
+#include "WorldState_Internal.h"
 #include <algorithm>
 #include "Engine.h"
 
@@ -24,17 +25,18 @@ void UActionPlanner::BeginPlay()
 	
 }
 
-
-std::vector<NodeRecord>::iterator UActionPlanner::IsContainedInOpenList(TWeakObjectPtr<UWorldState> i_pWorldState)
+std::vector<NodeRecord>::iterator UActionPlanner::IsContainedInOpenList(WorldState_Internal i_worldState)
 {
-	return std::find_if(begin(m_openList), end(m_openList), [&](const NodeRecord& n) { return *(n.pWorldState.Get()) == *i_pWorldState; });
+	return std::find_if(begin(m_openList), end(m_openList), [&](const NodeRecord& n) { return (n.worldState == i_worldState); });
 }
 
-bool UActionPlanner::IsContainedInClosedList(TWeakObjectPtr<UWorldState> i_pWorldState)
+bool UActionPlanner::IsContainedInClosedList(WorldState_Internal i_worldState)
 {
-	if (std::find_if(begin(m_closedList), end(m_closedList), [&](const NodeRecord& n) { return *(n.pWorldState.Get()) == *i_pWorldState; }) == end(m_closedList)) {
+	if (std::find_if(begin(m_closedList), end(m_closedList), [&](const NodeRecord& n) { return (n.worldState == i_worldState); }) == end(m_closedList))
+	{
 		return false;
 	}
+
 	return true;
 }
 
@@ -53,14 +55,9 @@ NodeRecord UActionPlanner::PopAndClose()
 	return m_closedList.back();
 }
 
-int UActionPlanner::CalculateHeuristic(TWeakObjectPtr<UWorldState> i_pCurrentState, TWeakObjectPtr<UWorldState> i_pTargetState)
+int UActionPlanner::CalculateHeuristic(WorldState_Internal i_currentState, WorldState_Internal i_targetState)
 {
-	if(i_pCurrentState.IsValid() && i_pTargetState.IsValid())
-	{
-		return i_pCurrentState->DistanceTo(i_pTargetState);
-	}
-
-	return 0;
+	return i_currentState.DistanceTo(i_targetState);
 }
 
 // Called every frame
@@ -87,6 +84,9 @@ TArray<UActionTest*> UActionPlanner::Plan(UWorldState* i_pCurrentState, UWorldSt
 		return TArray<UActionTest*>();
 	}
 
+	WorldState_Internal currentState(i_pCurrentState);
+	WorldState_Internal targetState(i_pTargetState);
+
 	// Feasible we'd re-use a planner, so clear out the prior results
 	m_openList.clear();
 	m_closedList.clear();
@@ -104,7 +104,7 @@ TArray<UActionTest*> UActionPlanner::Plan(UWorldState* i_pCurrentState, UWorldSt
 		// Look for Node with the lowest-F-score on the open list. Switch it to closed,
 		// and hang onto it -- this is our latest node.
 		NodeRecord current(PopAndClose());
-		UWorldState* debugptr1 = current.pWorldState.Get();
+		//UWorldState* debugptr1 = current.pWorldState.Get();
 
 		//std::cout << "Open list\n";
 		//printOpenList();
@@ -113,7 +113,7 @@ TArray<UActionTest*> UActionPlanner::Plan(UWorldState* i_pCurrentState, UWorldSt
 		//std::cout << "\nCurrent is " << current << " : " << (current.action_ == nullptr ? "" : current.action_->name()) << std::endl;
 
 		// Is our current state the goal state? If so, we've found a path, yay.
-		if (*(current.pWorldState.Get()) == *i_pTargetState) {
+		if (current.worldState == targetState) {
 			TArray<UActionTest*> plan;
 			do
 			{
@@ -131,12 +131,12 @@ TArray<UActionTest*> UActionPlanner::Plan(UWorldState* i_pCurrentState, UWorldSt
 		// Check each node REACHABLE from current -- in other words, where can we go from here?
 		for (const auto& potentialAction : actions)
 		{
-			if (potentialAction->OperableOn(current.pWorldState))
+			if (potentialAction->OperableOn(current.worldState))
 			{
-				potentialAction->ActOn(current.pWorldState);
+				auto resultantState = potentialAction->ActOn(current.worldState);
 
 				// Skip if already closed
-				if (IsContainedInClosedList(current.pWorldState))
+				if (IsContainedInClosedList(resultantState))
 				{
 					continue;
 				}
@@ -144,13 +144,13 @@ TArray<UActionTest*> UActionPlanner::Plan(UWorldState* i_pCurrentState, UWorldSt
 				//std::cout << potential_action.name() << " will get us to " << outcome << std::endl;
 
 				// Look for a Node with this WorldState on the open list.
-				auto p_outcomeNode = IsContainedInOpenList(current.pWorldState);
+				auto p_outcomeNode = IsContainedInOpenList(resultantState);
 
 				if (p_outcomeNode == end(m_openList))
 				{ // not a member of open list
 				  // Make a new node, with current as its parent, recording G & H
 				  //Node found(outcome, current.g_ + potentialAction.cost(), calculateHeuristic(outcome, goal), current.id_, &potentialAction);
-					NodeRecord found(i_pCurrentState, potentialAction, current.costSoFar + potentialAction->GetActionCost(), CalculateHeuristic(current.pWorldState, i_pTargetState), current.ID);
+					NodeRecord found(resultantState, potentialAction, current.costSoFar + potentialAction->GetActionCost(), CalculateHeuristic(resultantState, i_pTargetState), current.ID);
 					// Add it to the open list (maintaining sort-order therein)
 					AddToOpenList(std::move(found));
 				}
@@ -161,7 +161,7 @@ TArray<UActionTest*> UActionPlanner::Plan(UWorldState* i_pCurrentState, UWorldSt
 						//std::cout << "My path to " << p_outcome_node->ws_ << " using " << potential_action.name() << " (combined cost " << current.g_ + potential_action.cost() << ") is better than existing (cost " <<  p_outcome_node->g_ << "\n";
 						p_outcomeNode->parentID = current.ID;                  // make current its parent
 						p_outcomeNode->costSoFar = current.costSoFar + potentialAction->GetActionCost(); // recalc G & H
-						p_outcomeNode->estimatedCostToTarget = CalculateHeuristic(current.pWorldState, i_pTargetState);
+						p_outcomeNode->estimatedCostToTarget = CalculateHeuristic(current.worldState, i_pTargetState);
 						p_outcomeNode->pAction = potentialAction;
 
 						// resort open list to account for the new F

@@ -4,9 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "Object.h"
+#include "WorldState_Internal.h"
 #include "UActionTest.generated.h"
-
-class UWorldState;
 
 UENUM(BlueprintType)		//"BlueprintType" is essential to include
 enum class EStatusEnum : uint8
@@ -41,10 +40,10 @@ public:
 		Compare given world state against precondition,
 		to determine whether this action can Act on it
 	*/
-	bool OperableOn(TWeakObjectPtr<UWorldState> i_pWorldState);
+	bool OperableOn(const WorldState_Internal& i_worldState);
 
 	/** Act on the given world state, setting existing values and/or adding new ones */
-	TWeakObjectPtr<UWorldState> ActOn(TWeakObjectPtr<UWorldState> i_pWorldState) const;
+	WorldState_Internal ActOn(const WorldState_Internal& i_worldState) const;
 
 	/** Add new precondition element */
 	UFUNCTION(BlueprintCallable)
