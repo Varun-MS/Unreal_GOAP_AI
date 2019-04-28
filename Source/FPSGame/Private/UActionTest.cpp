@@ -2,6 +2,7 @@
 
 #include "UActionTest.h"
 #include "WorldState.h"
+#include <map>
 
 //#include <stdexcept>
 
@@ -27,53 +28,37 @@ bool UActionTest::IsRunning() const
 
 void UActionTest::Execute_Implementation(AAIController * aiController) {}
 
-bool UActionTest::OperableOn(TWeakObjectPtr<UWorldState> i_pWorldState)
+bool UActionTest::OperableOn(const WorldState_Internal& i_worldState)
 {
-	if(!i_pWorldState.IsValid())
-	{
-		return false;
-	}
-	
 	for (const auto& precond : preconditions)
 	{
-		/*try {
-			if (worldState->GetWorldStateVariable(precond.Key) != precond.Value)
-				return false;
-		}
-		catch (const std::out_of_range&) {
-			return false;
-		}*/
+		const auto& worldStateVariables = i_worldState.GetAllWorldStateVariables();
 
-		// NOTE: This needs to be updated!!
+		auto result = i_worldState.GetAllWorldStateVariables().find(precond.Key);
 
-		auto val = i_pWorldState->WorldStateVariables.Find(precond.Key);
-
-		if (val != nullptr)
+		if (result != worldStateVariables.end())
 		{
-			if (*val != precond.Value)
+			if (result->second != precond.Value)
 				return false;
 		}
 		else
+		{
 			return false;
+		}
 	}
 	return true;
 }
 
-TWeakObjectPtr<UWorldState> UActionTest::ActOn(TWeakObjectPtr<UWorldState> i_pWorldState) const
+WorldState_Internal UActionTest::ActOn(const WorldState_Internal& i_worldState) const
 {
-	if (!i_pWorldState.IsValid())
-	{
-	}
+	WorldState_Internal resultState;
 	
-	//UWorldState* newWorldState = NewObject<UWorldState>();
-
 	for (const auto& effect : effects)
 	{
-		i_pWorldState->AddWorldStateVariable(effect.Key ,effect.Value);
+		resultState.AddWorldStateVariable(effect.Key ,effect.Value);
 	}
 
-	return TWeakObjectPtr<UWorldState>();
-
+	return resultState;
 }
 
 void UActionTest::SetPrecondition(int32 key, bool value)
