@@ -4,36 +4,28 @@
 
 #include "CoreMinimal.h"
 
-#include "WorldState.h"
 #include "UActionTest.h"
-
-//class UWorldState;
-//class UActionTest;
-
-#include "Engine/UserDefinedStruct.h"
-#include "NodeRecord.generated.h"
-
+#include "WorldState.h"
 /**
  * 
  */
-USTRUCT()
-struct FNodeRecord
+
+class FPSGAME_API NodeRecord
 {
-	GENERATED_BODY()
+public:
+	NodeRecord();
+	NodeRecord(UWorldState* i_pWorldState, UActionTest* i_pAction, int i_costSoFar, int i_estimatedCostToTarget, int i_parentID);
 
-	FNodeRecord();
-	FNodeRecord(uint8_t i_parentID, UWorldState* i_pWorldState, UActionTest* i_pAction, float i_costSoFar, float i_estimatedCostToTarget);
-		
-	static uint8_t last_id;
-		
-	uint8_t id;
-	uint8_t parentID;
-	float costSoFar;
-	float estimatedCostToTarget;
-	UWorldState* p_worldState;
-	UActionTest* p_action;
+	~NodeRecord();
 
-	inline float TotalEstimatedCost() const { return costSoFar + estimatedCostToTarget; }
+	static int lastID;
+	int ID;
+	int parentID;
+	int costSoFar;
+	int estimatedCostToTarget;
+
+	TWeakObjectPtr<UActionTest> p_action;
+	TWeakObjectPtr<UWorldState> p_worldState;
+
+	inline int EstimateTotalCost() { return costSoFar + estimatedCostToTarget; }
 };
-
-bool operator< (const FNodeRecord& i_lhs, const FNodeRecord& i_rhs);

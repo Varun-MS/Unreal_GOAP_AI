@@ -30,7 +30,7 @@ bool UActionTest::OperableOn(const UWorldState & worldState)
 	for (const auto& precond : preconditions)
 	{
 		try {
-			if (worldState.m_worldStateVariables[precond.Key] != precond.Value)
+			if (worldState.WorldStateVariables[precond.Key] != precond.Value)
 				return false;
 		}
 		catch (const std::out_of_range&) {
@@ -44,7 +44,7 @@ void UActionTest::ActOn(UWorldState * worldState) const
 {
 	for (const auto& effect : effects)
 	{
-		worldState->SetVariableValue(effect.Key ,effect.Value);
+		worldState->AddWorldStateVariable(effect.Key ,effect.Value);
 	}
 }
 
