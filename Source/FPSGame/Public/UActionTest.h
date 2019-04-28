@@ -34,13 +34,14 @@ public:
 	inline bool IsComplete() const;
 	inline bool IsRunning() const;
 
-	virtual void Execute(AAIController const * aiController) {}
+	UFUNCTION(BlueprintNativeEvent)
+	void Execute(AAIController * aiController);
 
 	/**
 		Compare given world state against precondition,
 		to determine whether this action can Act on it
 	*/
-	bool OperableOn(const UWorldState& worldState);
+	bool OperableOn(UWorldState * worldState);
 
 	/** Act on the given world state, setting existing values and/or adding new ones */
 	void ActOn(UWorldState * worldState) const;
@@ -53,11 +54,19 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SetEffect(int32 key, bool value);
 
+	/** Set cost for this action */
+	UFUNCTION(BlueprintCallable)
+	void SetActionCost(int32 cost);
+
+	inline int32 GetActionCost() const { return cost; }
+
 	/** Set the properties that will be used by the action manager */
 	UFUNCTION(BlueprintCallable)
-	void SetActionProperties(int32 priority, int32 id, int32 expiryTime, bool canInterrupt = false, EStatusEnum status = EStatusEnum::VE_Valid);
+	void SetActionProperties(int32 priority, int32 id, int32 expiryTime, bool canInterrupt = false, EStatusEnum status = EStatusEnum::VE_Valid, FString name = "Action");
 
-	inline int32 Cost() const { return cost; }
+	/** Set a new status for this action */
+	UFUNCTION(BlueprintCallable)
+	void SetActionStatus(EStatusEnum status);
 
 private:
 	void InitializeDefaults();

@@ -23,7 +23,7 @@ public:
 	void ScheduleAction(UActionTest* Action);
 
 	UFUNCTION(BlueprintCallable)
-	void SetAIController(AAIController const * aiController);
+	void SetAIController(AAIController * aiController);
 
 protected:
 	// Called when the game starts
@@ -36,7 +36,7 @@ public:
 private:
 	void Update(float DeltaTime);
 	
-	AAIController const * aiController = NULL;
+	AAIController * aiController = nullptr;
 
 	TArray<UActionTest*> pendingQueue;
 	TArray<UActionTest*> activeQueue;

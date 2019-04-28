@@ -3,7 +3,7 @@
 #include "UActionTest.h"
 #include "WorldState.h"
 
-#include <stdexcept>
+//#include <stdexcept>
 
 UActionTest::UActionTest()
 {
@@ -25,17 +25,31 @@ inline bool UActionTest::IsRunning() const
 	return isRunning;
 }
 
-bool UActionTest::OperableOn(const UWorldState & worldState)
+void UActionTest::Execute_Implementation(AAIController * aiController) {}
+
+bool UActionTest::OperableOn(UWorldState * worldState)
 {
 	for (const auto& precond : preconditions)
 	{
-		try {
-			if (worldState.WorldStateVariables[precond.Key] != precond.Value)
+		/*try {
+			if (worldState->GetWorldStateVariable(precond.Key) != precond.Value)
 				return false;
 		}
 		catch (const std::out_of_range&) {
 			return false;
+		}*/
+
+		// NOTE: This needs to be updated!!
+
+		auto val = worldState->WorldStateVariables.Find(precond.Key);
+
+		if (val != nullptr)
+		{
+			if (*val != precond.Value)
+				return false;
 		}
+		else
+			return false;
 	}
 	return true;
 }
@@ -58,12 +72,23 @@ void UActionTest::SetEffect(int32 key, bool value)
 	preconditions[key] = value;
 }
 
-void UActionTest::SetActionProperties(int32 priority, int32 id, int32 expiryTime, bool canInterrupt, EStatusEnum status)
+void UActionTest::SetActionCost(int32 cost)
+{
+	this->cost = cost;
+}
+
+void UActionTest::SetActionProperties(int32 priority, int32 id, int32 expiryTime, bool canInterrupt, EStatusEnum status, FString name)
 {
 	this->priority = priority;
 	this->id = id;
 	this->expiryTime = expiryTime;
 	this->canInterrupt = canInterrupt;
+	this->status = status;
+	this->name = name;
+}
+
+void UActionTest::SetActionStatus(EStatusEnum status)
+{
 	this->status = status;
 }
 

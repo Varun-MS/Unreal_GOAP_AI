@@ -3,6 +3,8 @@
 #include "ActionManager.h"
 #include "UActionTest.h"
 
+#include "Engine.h"
+
 // Predicate function for sorting
 bool SortByPriority(const UActionTest & lhs, const UActionTest & rhs)
 {
@@ -29,6 +31,9 @@ void UActionManager::ScheduleAction(UActionTest* Action)
 	if (pendingQueue.Num() == 0)
 	{
 		pendingQueue.HeapPush(Action, SortByPriority);
+
+		//GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Green, Action->GetName());
+
 		return;
 	}
 
@@ -46,10 +51,9 @@ void UActionManager::ScheduleAction(UActionTest* Action)
 	}
 
 	pendingQueue.HeapPush(Action, SortByPriority);
-
 }
 
-void UActionManager::SetAIController(AAIController const * aiController)
+void UActionManager::SetAIController(AAIController * aiController)
 {
 	this->aiController = aiController;
 }
@@ -63,7 +67,6 @@ void UActionManager::BeginPlay()
 	
 }
 
-
 // Called every frame
 void UActionManager::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
@@ -74,6 +77,8 @@ void UActionManager::TickComponent(float DeltaTime, ELevelTick TickType, FActorC
 
 void UActionManager::Update(float DeltaTime)
 {
+	//GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Green, FString::FString("EXECUTING THE ACTION NOW!"));
+
 	//////
 	// Update queued time for each action in pending
 	//////
@@ -92,11 +97,11 @@ void UActionManager::Update(float DeltaTime)
 	//////
 	for (auto & action : pendingQueue)
 	{
-		if (activeQueue.Num() > 0 && activeQueue[0]->priority > action->priority)
+		if (activeQueue.Num() > 0 && activeQueue.HeapTop()->priority > action->priority)
 		{
 			// Break because highest priority action on the active queue has a higher priority
 			// than the current action on the pending queue. As such interrupts won't matter.
-			break;
+			continue;
 		}
 
 		if (action->CanInterrupt() && action->status != EStatusEnum::VE_Expired)
@@ -114,15 +119,34 @@ void UActionManager::Update(float DeltaTime)
 		}
 	}
 
+	if (activeQueue.Num() == 0)
+	{
+		if (pendingQueue.Num() == 0)
+			return;
+
+		UActionTest* tmp;
+
+		pendingQueue.HeapPop(tmp, SortByPriority, true);
+
+		if (tmp != nullptr)
+		{
+			activeQueue.HeapPush(tmp, SortByPriority);
+			GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Green, "BIUWEBRIQWR");
+		}	
+	}
+
 	//////
 	// Finally RUN all active actions
 	//////
 	for (auto & action : activeQueue)
 	{
-		if (action->status == EStatusEnum::VE_Complete)
+		if (action->status == EStatusEnum::VE_Complete || action->status == EStatusEnum::VE_Running)
 			continue;
 
 		action->Execute(aiController);
+
+		GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Green, FString::FString("EXECUTING THE ACTION NOW!"));
+		
 	}
 
 	//////
