@@ -20,6 +20,9 @@ public:
 	UActionManager();
 
 	UFUNCTION(BlueprintCallable)
+	void SchedulePlan(TArray<UActionTest*> Plan);
+
+	UFUNCTION(BlueprintCallable)
 	void ScheduleAction(UActionTest* Action);
 
 	UFUNCTION(BlueprintCallable)
@@ -35,12 +38,26 @@ public:
 
 private:
 	void Update(float DeltaTime);
+
+	void PlanUpdate(float DeltaTime);
 	
-	AAIController * aiController = nullptr;
+	bool FindActionOnActiveQueue(UActionTest* Action, bool RemoveIfFound = false);
+
+	void ClearCurrentPlan();
 
 protected:
 	UPROPERTY()
-	TArray<UActionTest*> pendingQueue;
+	TArray<UActionTest*> currentPlan;
+	UPROPERTY()
+	TArray<UActionTest*> stagingQueue;
+
+	UActionTest* activeAction = nullptr;
+
 	UPROPERTY()
 	TArray<UActionTest*> activeQueue;
+	UPROPERTY()
+	TArray<UActionTest*> pendingQueue;
+
+private:
+	AAIController * aiController = nullptr;
 };

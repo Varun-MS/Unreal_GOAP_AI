@@ -23,6 +23,34 @@ UActionManager::UActionManager()
 	activeQueue.Heapify(SortByPriority);
 }
 
+void UActionManager::SchedulePlan(TArray<UActionTest*> Plan)
+{
+	if (currentPlan.Num() == 0)
+	{
+		currentPlan = Plan;
+
+		for (auto & action : currentPlan)
+		{
+			action->status = EStatusEnum::VE_Valid;
+		}
+
+		return;
+	}
+
+	if (currentPlan.Num() != Plan.Num())
+	{
+		ClearCurrentPlan();
+
+		currentPlan = Plan;
+
+		for (auto & action : currentPlan)
+		{
+			action->status = EStatusEnum::VE_Valid;
+		}
+
+		return;
+	}
+}
 
 void UActionManager::ScheduleAction(UActionTest* Action)
 {
@@ -212,5 +240,61 @@ void UActionManager::Update(float DeltaTime)
 			GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Red, "CleanUp Of Finished ACTION");
 		}
 	}
+}
+
+void UActionManager::PlanUpdate(float DeltaTime)
+{
+	// NOTE staging queue is the queue of planned actions ASSUMED to be in the correct order
+	// NOTE activeAction is the action that is being executed
+
+	/////
+	// If there is no action being executed get a new action from the staging queue
+	/////
+	if (!activeAction)
+	{
+		if (stagingQueue.Num() != 0)
+		{
+			activeAction = stagingQueue[0];
+			activeAction->status = EStatusEnum::VE_Valid;
+			stagingQueue.RemoveAt(0);
+		}
+	}
+
+	if (activeAction && activeAction->IsValidLowLevel() )
+	{
+		//////
+		// Execute the active action if it is valid
+		//////
+		if (activeAction->status == EStatusEnum::VE_Valid)
+			activeAction->Execute(aiController);
+
+		//////
+		// If the active action has completed, clear it
+		//////
+		if (activeAction->status == EStatusEnum::VE_Complete)
+		{
+			activeAction = nullptr;
+		}
+	}
+}
+
+bool UActionManager::FindActionOnActiveQueue(UActionTest * Action, bool RemoveIfFound)
+{
+	int index = 0;
+	if (activeQueue.Find(Action, index))
+	{
+		if (RemoveIfFound)
+			activeQueue.HeapRemoveAt(index, SortByPriority, true);
+
+		return true;
+	}
+	return false;
+}
+
+void UActionManager::ClearCurrentPlan()
+{
+	stagingQueue.Empty();
+	currentPlan.Empty();
+	activeAction = nullptr;
 }
 
