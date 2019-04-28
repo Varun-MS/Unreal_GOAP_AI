@@ -41,10 +41,10 @@ public:
 		Compare given world state against precondition,
 		to determine whether this action can Act on it
 	*/
-	bool OperableOn(UWorldState * worldState);
+	bool OperableOn(TWeakObjectPtr<UWorldState> i_pWorldState);
 
 	/** Act on the given world state, setting existing values and/or adding new ones */
-	void ActOn(UWorldState * worldState) const;
+	void ActOn(TWeakObjectPtr<UWorldState> o_pWorldState) const;
 
 	/** Add new precondition element */
 	UFUNCTION(BlueprintCallable)

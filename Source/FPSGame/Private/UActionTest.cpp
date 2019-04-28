@@ -25,10 +25,13 @@ inline bool UActionTest::IsRunning() const
 	return isRunning;
 }
 
-void UActionTest::Execute_Implementation(AAIController * aiController) {}
-
-bool UActionTest::OperableOn(UWorldState * worldState)
+bool UActionTest::OperableOn(TWeakObjectPtr<UWorldState> i_pWorldState)
 {
+	if(!i_pWorldState.IsValid())
+	{
+		return false;
+	}
+	
 	for (const auto& precond : preconditions)
 	{
 		/*try {
@@ -41,7 +44,7 @@ bool UActionTest::OperableOn(UWorldState * worldState)
 
 		// NOTE: This needs to be updated!!
 
-		auto val = worldState->WorldStateVariables.Find(precond.Key);
+		auto val = i_pWorldState->WorldStateVariables.Find(precond.Key);
 
 		if (val != nullptr)
 		{
@@ -54,11 +57,16 @@ bool UActionTest::OperableOn(UWorldState * worldState)
 	return true;
 }
 
-void UActionTest::ActOn(UWorldState * worldState) const
+void UActionTest::ActOn(TWeakObjectPtr<UWorldState> o_pWorldState) const
 {
+	if (!o_pWorldState.IsValid())
+	{
+		return;
+	}
+	
 	for (const auto& effect : effects)
 	{
-		worldState->AddWorldStateVariable(effect.Key ,effect.Value);
+		o_pWorldState->AddWorldStateVariable(effect.Key ,effect.Value);
 	}
 }
 

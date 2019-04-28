@@ -10,12 +10,17 @@ NodeRecord::NodeRecord() : costSoFar(0), estimatedCostToTarget(0)
 }
 
 NodeRecord::NodeRecord(
-	UWorldState* i_pWorldState, UActionTest* i_pAction, int i_costSoFar, int i_estimatedCostToTarget, int i_parentID
-) : p_worldState(i_pWorldState), p_action(i_pAction), costSoFar(i_costSoFar), estimatedCostToTarget(i_estimatedCostToTarget), parentID(i_parentID)
+	TWeakObjectPtr<UWorldState> i_pWorldState, TWeakObjectPtr<UActionTest> i_pAction, int i_costSoFar, int i_estimatedCostToTarget, int i_parentID
+) : pWorldState(i_pWorldState), pAction(i_pAction), costSoFar(i_costSoFar), estimatedCostToTarget(i_estimatedCostToTarget), parentID(i_parentID)
 {
 	ID = ++lastID;
 }
 
 NodeRecord::~NodeRecord()
 {
+}
+
+bool operator<(const NodeRecord& i_lhs, const NodeRecord& i_rhs)
+{
+	return i_lhs.EstimateTotalCost() < i_rhs.EstimateTotalCost();
 }
