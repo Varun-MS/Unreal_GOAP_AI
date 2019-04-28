@@ -59,27 +59,37 @@ bool UActionTest::OperableOn(TWeakObjectPtr<UWorldState> i_pWorldState)
 	return true;
 }
 
-void UActionTest::ActOn(TWeakObjectPtr<UWorldState> o_pWorldState) const
+TWeakObjectPtr<UWorldState> UActionTest::ActOn(TWeakObjectPtr<UWorldState> i_pWorldState) const
 {
-	if (!o_pWorldState.IsValid())
+	if (!i_pWorldState.IsValid())
 	{
-		return;
 	}
 	
+	//UWorldState* newWorldState = NewObject<UWorldState>();
+
 	for (const auto& effect : effects)
 	{
-		o_pWorldState->AddWorldStateVariable(effect.Key ,effect.Value);
+		i_pWorldState->AddWorldStateVariable(effect.Key ,effect.Value);
 	}
+
+	return TWeakObjectPtr<UWorldState>();
+
 }
 
 void UActionTest::SetPrecondition(int32 key, bool value)
 {
-	preconditions[key] = value;
+	if (preconditions.Contains(key))
+		preconditions[key] = value;
+	else
+		preconditions.Add(key, value);
 }
 
 void UActionTest::SetEffect(int32 key, bool value)
 {
-	preconditions[key] = value;
+	if (effects.Contains(key))
+		effects[key] = value;
+	else
+		effects.Add(key, value);
 }
 
 void UActionTest::SetActionCost(int32 cost)

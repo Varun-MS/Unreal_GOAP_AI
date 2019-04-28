@@ -13,7 +13,7 @@
 #include "ActionPlanner.generated.h"
 
 
-UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+UCLASS(Blueprintable, ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class FPSGAME_API UActionPlanner : public UActorComponent
 {
 	GENERATED_BODY()
@@ -33,7 +33,7 @@ protected:
 	bool IsContainedInClosedList(TWeakObjectPtr<UWorldState> i_pWorldState);
 
 	void AddToOpenList(NodeRecord&&);
-	NodeRecord& PopAndClose();
+	NodeRecord PopAndClose();
 
 	int CalculateHeuristic(TWeakObjectPtr<UWorldState> i_pCurrentState, TWeakObjectPtr<UWorldState> i_pTargetState);
 
@@ -41,5 +41,7 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-	TArray<TWeakObjectPtr<UActionTest>> Plan(TWeakObjectPtr<UWorldState> i_pCurrentState, TWeakObjectPtr<UWorldState> i_pTargetState, const TArray<TWeakObjectPtr<UActionTest>>& actions);
+	UFUNCTION(BlueprintCallable)
+	TArray<UActionTest*> Plan(UWorldState* i_pCurrentState, UWorldState* i_pTargetState, const TArray<UActionTest*>& actions);
+	//TArray<TWeakObjectPtr<UActionTest>> Plan(TWeakObjectPtr<UWorldState> i_pCurrentState, TWeakObjectPtr<UWorldState> i_pTargetState, const TArray<TWeakObjectPtr<UActionTest>>& actions);
 };

@@ -44,7 +44,7 @@ public:
 	bool OperableOn(TWeakObjectPtr<UWorldState> i_pWorldState);
 
 	/** Act on the given world state, setting existing values and/or adding new ones */
-	void ActOn(TWeakObjectPtr<UWorldState> o_pWorldState) const;
+	TWeakObjectPtr<UWorldState> ActOn(TWeakObjectPtr<UWorldState> i_pWorldState) const;
 
 	/** Add new precondition element */
 	UFUNCTION(BlueprintCallable)
@@ -83,6 +83,12 @@ public:
 	float queuedTime;
 	float expiryTime;
 
+	UPROPERTY(BlueprintReadWrite)
+	TMap<int32, bool> preconditions;
+
+	UPROPERTY(BlueprintReadWrite)
+	TMap<int32, bool> effects;
+
 protected:
 	bool isComplete;
 	bool isRunning;
@@ -93,9 +99,6 @@ private:
 	int32 cost;
 
 	FString name;
-
-	TMap<int32, bool> preconditions;
-	TMap<int32, bool> effects;
 
 };
 

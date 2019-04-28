@@ -33,11 +33,16 @@ public:
 	FString GetName() { return HumanReadableName; }
 
 	int DistanceTo(TWeakObjectPtr<UWorldState> i_otherState) const;
+	int DistanceTo(const UWorldState& i_otherState) const;
 
+	UPROPERTY(BlueprintReadWrite)
 	TMap<int, bool> WorldStateVariables;
+	
+	UPROPERTY(BlueprintReadWrite)
 	FString HumanReadableName;
 
 };
 
 bool operator== (TWeakObjectPtr<UWorldState> i_pLHS, TWeakObjectPtr<UWorldState> i_pRHS);
+bool operator== (const UWorldState& i_LHS, const UWorldState& i_RHS);
 
