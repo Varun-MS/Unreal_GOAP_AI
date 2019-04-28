@@ -38,7 +38,9 @@ private:
 	
 	AAIController * aiController = nullptr;
 
+protected:
+	UPROPERTY()
 	TArray<UActionTest*> pendingQueue;
+	UPROPERTY()
 	TArray<UActionTest*> activeQueue;
-
 };
