@@ -25,6 +25,8 @@ inline bool UActionTest::IsRunning() const
 	return isRunning;
 }
 
+void UActionTest::Execute_Implementation(AAIController * aiController) {}
+
 bool UActionTest::OperableOn(TWeakObjectPtr<UWorldState> i_pWorldState)
 {
 	if(!i_pWorldState.IsValid())

@@ -59,6 +59,8 @@ int UActionPlanner::CalculateHeuristic(TWeakObjectPtr<UWorldState> i_pCurrentSta
 	{
 		return i_pCurrentState->DistanceTo(i_pTargetState);
 	}
+
+	return 0;
 }
 
 // Called every frame
@@ -147,17 +149,17 @@ TArray<TWeakObjectPtr<UActionTest>> UActionPlanner::Plan(TWeakObjectPtr<UWorldSt
 				{ // not a member of open list
 					// Make a new node, with current as its parent, recording G & H
 					//Node found(outcome, current.g_ + potentialAction.cost(), calculateHeuristic(outcome, goal), current.id_, &potentialAction);
-					NodeRecord found(i_pCurrentState, potentialAction, current.costSoFar + potentialAction->Cost(), CalculateHeuristic(current.pWorldState, i_pTargetState), current.ID);
+					NodeRecord found(i_pCurrentState, potentialAction, current.costSoFar + potentialAction->GetActionCost(), CalculateHeuristic(current.pWorldState, i_pTargetState), current.ID);
 					// Add it to the open list (maintaining sort-order therein)
 					AddToOpenList(std::move(found));
 				}
 				else 
 				{ // already a member of the open list
 				 // check if the current G is better than the recorded G
-					if (current.costSoFar + potentialAction->Cost() < p_outcomeNode->costSoFar) {
+					if (current.costSoFar + potentialAction->GetActionCost() < p_outcomeNode->costSoFar) {
 						//std::cout << "My path to " << p_outcome_node->ws_ << " using " << potential_action.name() << " (combined cost " << current.g_ + potential_action.cost() << ") is better than existing (cost " <<  p_outcome_node->g_ << "\n";
 						p_outcomeNode->parentID = current.ID;                  // make current its parent
-						p_outcomeNode->costSoFar = current.costSoFar + potentialAction->Cost(); // recalc G & H
+						p_outcomeNode->costSoFar = current.costSoFar + potentialAction->GetActionCost(); // recalc G & H
 						p_outcomeNode->estimatedCostToTarget = CalculateHeuristic(current.pWorldState, i_pTargetState);
 						p_outcomeNode->pAction = potentialAction;
 
