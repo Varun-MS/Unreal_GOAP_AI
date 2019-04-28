@@ -30,9 +30,9 @@ class FPSGAME_API UActionTest : public UObject
 public:
 	UActionTest();
 
-	inline bool CanInterrupt() const;
-	inline bool IsComplete() const;
-	inline bool IsRunning() const;
+	bool CanInterrupt() const;
+	bool IsComplete() const;
+	bool IsRunning() const;
 
 	UFUNCTION(BlueprintNativeEvent)
 	void Execute(AAIController * aiController);

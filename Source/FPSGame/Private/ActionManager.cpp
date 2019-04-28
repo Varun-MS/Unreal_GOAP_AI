@@ -2,7 +2,7 @@
 
 #include "ActionManager.h"
 #include "UActionTest.h"
-
+#include "AIController.h"
 #include "Engine.h"
 
 // Predicate function for sorting

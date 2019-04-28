@@ -10,17 +10,17 @@ UActionTest::UActionTest()
 	InitializeDefaults();
 }
 
-inline bool UActionTest::CanInterrupt() const
+bool UActionTest::CanInterrupt() const
 {
 	return canInterrupt;
 }
 
-inline bool UActionTest::IsComplete() const
+bool UActionTest::IsComplete() const
 {
 	return isComplete;
 }
 
-inline bool UActionTest::IsRunning() const
+bool UActionTest::IsRunning() const
 {
 	return isRunning;
 }

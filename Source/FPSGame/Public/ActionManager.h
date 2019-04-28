@@ -4,9 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "AIController.h"
 
 class UActionTest;
+class AAIController;
 
 #include "ActionManager.generated.h"
 
