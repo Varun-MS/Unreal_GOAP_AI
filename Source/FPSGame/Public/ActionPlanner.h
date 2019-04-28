@@ -4,6 +4,12 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+
+#include "NodeRecord.h"
+#include "WorldState.h"
+#include "UActionTest.h"
+#include <vector>
+
 #include "ActionPlanner.generated.h"
 
 
@@ -20,10 +26,20 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
+	std::vector<NodeRecord> m_openList;
+	std::vector<NodeRecord> m_closedList;
+
+	std::vector<NodeRecord>::iterator IsContainedInOpenList(TWeakObjectPtr<UWorldState> i_pWorldState);
+	bool IsContainedInClosedList(TWeakObjectPtr<UWorldState> i_pWorldState);
+
+	void AddToOpenList(NodeRecord&&);
+	NodeRecord& PopAndClose();
+
+	int CalculateHeuristic(TWeakObjectPtr<UWorldState> i_pCurrentState, TWeakObjectPtr<UWorldState> i_pTargetState);
+
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-		
-	
+	TArray<TWeakObjectPtr<UActionTest>> Plan(TWeakObjectPtr<UWorldState> i_pCurrentState, TWeakObjectPtr<UWorldState> i_pTargetState, const TArray<TWeakObjectPtr<UActionTest>>& actions);
 };

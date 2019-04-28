@@ -29,13 +29,13 @@ bool UWorldState::GetWorldStateVariable(int VariableCode)
 		return *result;
 }
 
-int UWorldState::DistanceTo(const UWorldState& i_otherState) const
+int UWorldState::DistanceTo(TWeakObjectPtr<UWorldState> i_otherState) const
 {
 	int result = 0;
 
 	for (const auto& keyValuePair : WorldStateVariables) 
 	{
-		auto lookupResult = WorldStateVariables.Find(keyValuePair.Key);
+		auto lookupResult = i_otherState->WorldStateVariables.Find(keyValuePair.Key);
 		
 		if (lookupResult == nullptr || *(lookupResult) != keyValuePair.Value) 
 		{
@@ -46,8 +46,15 @@ int UWorldState::DistanceTo(const UWorldState& i_otherState) const
 	return result;
 }
 
-
-bool UWorldState::operator==(const UWorldState& i_rhs) const
+bool operator==(TWeakObjectPtr<UWorldState> i_pLHS, TWeakObjectPtr<UWorldState> i_pRHS)
 {
-	return (DistanceTo(i_rhs) == 0);
+	if(i_pLHS.IsValid() && i_pRHS.IsValid())
+	{
+		return (i_pLHS->DistanceTo(i_pRHS));
+	}
+
+	else
+	{
+		return false;
+	}
 }

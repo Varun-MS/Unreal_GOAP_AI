@@ -14,7 +14,7 @@ class FPSGAME_API NodeRecord
 {
 public:
 	NodeRecord();
-	NodeRecord(UWorldState* i_pWorldState, UActionTest* i_pAction, int i_costSoFar, int i_estimatedCostToTarget, int i_parentID);
+	NodeRecord(TWeakObjectPtr<UWorldState> i_pWorldState, TWeakObjectPtr<UActionTest> i_pAction, int i_costSoFar, int i_estimatedCostToTarget, int i_parentID);
 
 	~NodeRecord();
 
@@ -24,8 +24,10 @@ public:
 	int costSoFar;
 	int estimatedCostToTarget;
 
-	TWeakObjectPtr<UActionTest> p_action;
-	TWeakObjectPtr<UWorldState> p_worldState;
+	TWeakObjectPtr<UActionTest> pAction;
+	TWeakObjectPtr<UWorldState> pWorldState;
 
-	inline int EstimateTotalCost() { return costSoFar + estimatedCostToTarget; }
+	FORCEINLINE int EstimateTotalCost() const { return costSoFar + estimatedCostToTarget; }
 };
+
+bool operator< (const NodeRecord& i_lhs, const NodeRecord& i_rhs);

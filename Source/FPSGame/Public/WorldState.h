@@ -32,11 +32,12 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "World State")
 	FString GetName() { return HumanReadableName; }
 
-	int DistanceTo(const UWorldState& i_otherState) const;
-
-	bool operator== (const UWorldState& i_rhs) const;
+	int DistanceTo(TWeakObjectPtr<UWorldState> i_otherState) const;
 
 	TMap<int, bool> WorldStateVariables;
 	FString HumanReadableName;
 
 };
+
+bool operator== (TWeakObjectPtr<UWorldState> i_pLHS, TWeakObjectPtr<UWorldState> i_pRHS);
+

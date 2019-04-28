@@ -25,12 +25,17 @@ inline bool UActionTest::IsRunning() const
 	return isRunning;
 }
 
-bool UActionTest::OperableOn(const UWorldState & worldState)
+bool UActionTest::OperableOn(TWeakObjectPtr<UWorldState> i_pWorldState)
 {
+	if(!i_pWorldState.IsValid())
+	{
+		return false;
+	}
+	
 	for (const auto& precond : preconditions)
 	{
 		try {
-			if (worldState.WorldStateVariables[precond.Key] != precond.Value)
+			if (i_pWorldState->WorldStateVariables[precond.Key] != precond.Value)
 				return false;
 		}
 		catch (const std::out_of_range&) {
@@ -40,11 +45,16 @@ bool UActionTest::OperableOn(const UWorldState & worldState)
 	return true;
 }
 
-void UActionTest::ActOn(UWorldState * worldState) const
+void UActionTest::ActOn(TWeakObjectPtr<UWorldState> o_pWorldState) const
 {
+	if (!o_pWorldState.IsValid())
+	{
+		return;
+	}
+	
 	for (const auto& effect : effects)
 	{
-		worldState->AddWorldStateVariable(effect.Key ,effect.Value);
+		o_pWorldState->AddWorldStateVariable(effect.Key ,effect.Value);
 	}
 }
 
