@@ -124,7 +124,8 @@ void UActionManager::TickComponent(float DeltaTime, ELevelTick TickType, FActorC
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	Update(DeltaTime);
+	//Update(DeltaTime);
+	PlanUpdate(DeltaTime);
 }
 
 void UActionManager::Update(float DeltaTime)
@@ -275,9 +276,8 @@ void UActionManager::PlanUpdate(float DeltaTime)
 	{
 		if (stagingQueue.Num() != 0)
 		{
-			activeAction = stagingQueue[0];
+			activeAction = stagingQueue.Pop(true);
 			activeAction->status = EStatusEnum::VE_Valid;
-			stagingQueue.RemoveAt(0);
 		}
 	}
 
@@ -328,6 +328,8 @@ void UActionManager::SetCurrentPlan(TArray<UActionTest*> Plan)
 	{
 		action->status = EStatusEnum::VE_Valid;
 	}
+
+	stagingQueue = currentPlan;
 }
 
 void UActionManager::ClearCurrentPlan()
