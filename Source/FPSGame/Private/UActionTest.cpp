@@ -51,7 +51,7 @@ bool UActionTest::OperableOn(const WorldState_Internal& i_worldState)
 
 WorldState_Internal UActionTest::ActOn(const WorldState_Internal& i_worldState) const
 {
-	WorldState_Internal resultState;
+	WorldState_Internal resultState(i_worldState);
 	
 	for (const auto& effect : effects)
 	{

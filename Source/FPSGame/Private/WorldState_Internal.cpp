@@ -33,9 +33,8 @@ int WorldState_Internal::DistanceTo(const WorldState_Internal& i_otherState) con
 
 		if(searchResult == otherStateWorldStateVariables.end())
 		{
-			distance++;
+			continue;
 		}
-
 		else
 		{
 			if(keyValuePair.second != searchResult->second)

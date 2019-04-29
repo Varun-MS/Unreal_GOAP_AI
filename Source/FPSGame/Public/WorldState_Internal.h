@@ -19,7 +19,7 @@ public:
 	WorldState_Internal(UWorldState* i_UWorldState);
 	~WorldState_Internal();
 	
-	void AddWorldStateVariable(int i_variableCode, bool i_value) { m_worldStateVariables.insert(std::make_pair(i_variableCode, i_value)); }
+	void AddWorldStateVariable(int i_variableCode, bool i_value) { m_worldStateVariables.insert_or_assign(i_variableCode, i_value); }
 	const std::map<int, bool>& GetAllWorldStateVariables() const { return m_worldStateVariables; }
 
 	void SetName(const std::string& i_name) { m_humanReadableName = i_name; }
