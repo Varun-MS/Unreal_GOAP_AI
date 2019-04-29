@@ -43,6 +43,7 @@ private:
 	
 	bool FindActionOnActiveQueue(UActionTest* Action, bool RemoveIfFound = false);
 
+	void SetCurrentPlan(TArray<UActionTest*> Plan);
 	void ClearCurrentPlan();
 
 protected:

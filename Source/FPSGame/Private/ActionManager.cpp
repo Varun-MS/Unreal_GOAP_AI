@@ -25,31 +25,52 @@ UActionManager::UActionManager()
 
 void UActionManager::SchedulePlan(TArray<UActionTest*> Plan)
 {
+	// check if input plan is valid
+	if (Plan.Num() == 0)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Red, "New plan was EMPTY ... returning");
+		return;
+	}
+
+	for (auto & action : Plan)
+	{
+		if (!action || !action->IsValidLowLevel())
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Red, "New plan was INVALID ... returning");
+			return;
+		}	
+	}
+
+	// If no plan was active assign input plan as current plan
 	if (currentPlan.Num() == 0)
 	{
-		currentPlan = Plan;
-
-		for (auto & action : currentPlan)
-		{
-			action->status = EStatusEnum::VE_Valid;
-		}
+		SetCurrentPlan(Plan);
 
 		return;
 	}
 
+	// If length of plans are different => this is a new plan!
 	if (currentPlan.Num() != Plan.Num())
 	{
-		ClearCurrentPlan();
-
-		currentPlan = Plan;
-
-		for (auto & action : currentPlan)
-		{
-			action->status = EStatusEnum::VE_Valid;
-		}
+		SetCurrentPlan(Plan);
 
 		return;
 	}
+
+	for (int i = 0; i != currentPlan.Num(); ++i)
+	{
+		// If even one action found that is different => this is a new plan!
+		if (*currentPlan[i] != *Plan[i])
+		{
+			SetCurrentPlan(Plan);
+
+			return;
+		}
+	}
+
+	// Reaching here means that the plans were identical so don't do anything
+	GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, "New plan was indentical to current plan ... returning");
+	return;
 }
 
 void UActionManager::ScheduleAction(UActionTest* Action)
@@ -274,6 +295,12 @@ void UActionManager::PlanUpdate(float DeltaTime)
 		if (activeAction->status == EStatusEnum::VE_Complete)
 		{
 			activeAction = nullptr;
+
+			if (stagingQueue.Num() == 0)
+			{
+				GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Green, "Finished executing current plan!");
+				currentPlan.Empty();
+			}
 		}
 	}
 }
@@ -289,6 +316,18 @@ bool UActionManager::FindActionOnActiveQueue(UActionTest * Action, bool RemoveIf
 		return true;
 	}
 	return false;
+}
+
+void UActionManager::SetCurrentPlan(TArray<UActionTest*> Plan)
+{
+	ClearCurrentPlan();
+
+	currentPlan = Plan;
+
+	for (auto & action : currentPlan)
+	{
+		action->status = EStatusEnum::VE_Valid;
+	}
 }
 
 void UActionManager::ClearCurrentPlan()
