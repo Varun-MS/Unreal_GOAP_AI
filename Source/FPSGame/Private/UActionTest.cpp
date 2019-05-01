@@ -61,7 +61,7 @@ WorldState_Internal UActionTest::ActOn(const WorldState_Internal& i_worldState) 
 	return resultState;
 }
 
-void UActionTest::SetPrecondition(int32 key, bool value)
+void UActionTest::SetPrecondition(uint8 key, bool value)
 {
 	if (preconditions.Contains(key))
 		preconditions[key] = value;
@@ -69,7 +69,7 @@ void UActionTest::SetPrecondition(int32 key, bool value)
 		preconditions.Add(key, value);
 }
 
-void UActionTest::SetEffect(int32 key, bool value)
+void UActionTest::SetEffect(uint8 key, bool value)
 {
 	if (effects.Contains(key))
 		effects[key] = value;

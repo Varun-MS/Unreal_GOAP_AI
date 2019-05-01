@@ -48,11 +48,11 @@ public:
 
 	/** Add new precondition element */
 	UFUNCTION(BlueprintCallable)
-	void SetPrecondition(int32 key, bool value);
+	void SetPrecondition(uint8 key, bool value);
 
 	/** Add new effect element */
 	UFUNCTION(BlueprintCallable)
-	void SetEffect(int32 key, bool value);
+	void SetEffect(uint8 key, bool value);
 
 	/** Set cost for this action */
 	UFUNCTION(BlueprintCallable)
@@ -84,10 +84,10 @@ public:
 	float expiryTime;
 
 	UPROPERTY(BlueprintReadWrite)
-	TMap<int32, bool> preconditions;
+	TMap<uint8, bool> preconditions;
 
 	UPROPERTY(BlueprintReadWrite)
-	TMap<int32, bool> effects;
+	TMap<uint8, bool> effects;
 
 protected:
 	bool isComplete;
