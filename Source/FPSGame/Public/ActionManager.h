@@ -24,6 +24,9 @@ public:
 	void SchedulePlan(TArray<UActionTest*> Plan);
 
 	UFUNCTION(BlueprintCallable)
+	void ClearCurrentPlan();
+
+	UFUNCTION(BlueprintCallable)
 	void ScheduleAction(UActionTest* Action);
 
 	UFUNCTION(BlueprintCallable)
@@ -48,7 +51,6 @@ private:
 	bool FindActionOnActiveQueue(UActionTest* Action, bool RemoveIfFound = false);
 
 	void SetCurrentPlan(TArray<UActionTest*> Plan);
-	void ClearCurrentPlan();
 
 protected:
 	UPROPERTY()

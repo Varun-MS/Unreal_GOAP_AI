@@ -74,7 +74,8 @@ void UWorldStateManager::RecalculateWorldState(ACharacter* Character)
 {
 	for (auto keyValuePair : (CurrentWorldState->WorldStateDefiners))
 	{
-		keyValuePair.Value->ReevaluateDefiner(Character);
+		keyValuePair.Value->IsTrue = keyValuePair.Value->ReevaluateDefiner(Character);
 	}
 }
+
 

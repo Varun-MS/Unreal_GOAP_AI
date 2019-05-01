@@ -68,6 +68,13 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SetActionStatus(EStatusEnum status);
 
+	UFUNCTION(BlueprintCallable)
+		EStatusEnum GetActionStatus() { return status; }
+
+	/** Set a new ID for this action */
+	UFUNCTION(BlueprintCallable)
+	void SetActionID(int32 id) { this->id = id; }
+
 private:
 	void InitializeDefaults();
 
@@ -76,6 +83,7 @@ private:
 
 public:
 	int32 priority;
+	UPROPERTY(BlueprintReadWrite)
 	int32 id;
 
 	EStatusEnum status;

@@ -70,15 +70,7 @@ void UActionPlanner::TickComponent(float DeltaTime, ELevelTick TickType, FActorC
 
 TArray<UActionTest*> UActionPlanner::Plan(UWorldState* i_pCurrentState, UWorldState* i_pTargetState, const TArray<UActionTest*>& actions)
 {
-	if (i_pCurrentState && i_pTargetState)
-	{
-		if (i_pCurrentState == i_pTargetState)
-		{
-			return TArray<UActionTest*>();
-		}
-	}
-
-	else
+	if (!i_pCurrentState || !i_pTargetState)
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 5, FColor::Magenta, "Your World States were invalid!");
 		return TArray<UActionTest*>();
@@ -86,6 +78,11 @@ TArray<UActionTest*> UActionPlanner::Plan(UWorldState* i_pCurrentState, UWorldSt
 
 	WorldState_Internal currentState(i_pCurrentState);
 	WorldState_Internal targetState(i_pTargetState);
+
+	if (currentState == targetState)
+	{
+		return TArray<UActionTest*>();
+	}
 
 	// Feasible we'd re-use a planner, so clear out the prior results
 	m_openList.clear();

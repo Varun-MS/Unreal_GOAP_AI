@@ -8,7 +8,7 @@
 
 UActionTest::UActionTest()
 {
-	InitializeDefaults();
+	//InitializeDefaults();
 }
 
 bool UActionTest::CanInterrupt() const

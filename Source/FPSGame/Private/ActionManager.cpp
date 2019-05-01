@@ -61,7 +61,7 @@ void UActionManager::SchedulePlan(TArray<UActionTest*> Plan)
 	for (int i = 0; i != currentPlan.Num(); ++i)
 	{
 		// If even one action found that is different => this is a new plan!
-		if (*currentPlan[i] != *Plan[i])
+		if (currentPlan[i]->id != Plan[i]->id)
 		{
 			SetCurrentPlan(Plan);
 
@@ -113,7 +113,7 @@ void UActionManager::SetAIController(AAIController * aiController)
 
 void UActionManager::SetWorldStateManager(UWorldStateManager * WorldStateManager)
 {
-	this->worldStateManager = worldStateManager;
+	this->worldStateManager = WorldStateManager;
 }
 
 // Called when the game starts
@@ -340,6 +340,11 @@ void UActionManager::SetCurrentPlan(TArray<UActionTest*> Plan)
 
 void UActionManager::ClearCurrentPlan()
 {
+	if (activeAction && activeAction->IsValidLowLevel())
+	{
+		activeAction->status = EStatusEnum::VE_Expired;
+	}
+
 	stagingQueue.Empty();
 	currentPlan.Empty();
 	activeAction = nullptr;
