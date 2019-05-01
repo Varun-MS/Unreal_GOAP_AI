@@ -3,6 +3,7 @@
 #include "ActionManager.h"
 #include "UActionTest.h"
 #include "AIController.h"
+#include "WorldStateManager.h"
 #include "Engine.h"
 
 // Predicate function for sorting
@@ -108,6 +109,11 @@ void UActionManager::ScheduleAction(UActionTest* Action)
 void UActionManager::SetAIController(AAIController * aiController)
 {
 	this->aiController = aiController;
+}
+
+void UActionManager::SetWorldStateManager(UWorldStateManager * WorldStateManager)
+{
+	this->worldStateManager = worldStateManager;
 }
 
 // Called when the game starts
@@ -235,7 +241,7 @@ void UActionManager::Update(float DeltaTime)
 		{
 			GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Green, "Executing action in active queue");
 			//GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Red, "Number of actions in active queue = " + FString::FromInt(activeQueue.Num()));
-			action->Execute(aiController);
+			action->Execute(aiController, worldStateManager);
 		}
 	}
 
@@ -287,7 +293,7 @@ void UActionManager::PlanUpdate(float DeltaTime)
 		// Execute the active action if it is valid
 		//////
 		if (activeAction->status == EStatusEnum::VE_Valid)
-			activeAction->Execute(aiController);
+			activeAction->Execute(aiController, worldStateManager);
 
 		//////
 		// If the active action has completed, clear it

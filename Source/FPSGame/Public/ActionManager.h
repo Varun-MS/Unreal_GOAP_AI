@@ -7,6 +7,7 @@
 
 class UActionTest;
 class AAIController;
+class UWorldStateManager;
 
 #include "ActionManager.generated.h"
 
@@ -26,7 +27,10 @@ public:
 	void ScheduleAction(UActionTest* Action);
 
 	UFUNCTION(BlueprintCallable)
-	void SetAIController(AAIController * aiController);
+	void SetAIController(AAIController * AiController);
+
+	UFUNCTION(BlueprintCallable)
+	void SetWorldStateManager(UWorldStateManager * WorldStateManager);
 
 protected:
 	// Called when the game starts
@@ -61,4 +65,5 @@ protected:
 
 private:
 	AAIController * aiController = nullptr;
+	UWorldStateManager * worldStateManager = nullptr;
 };

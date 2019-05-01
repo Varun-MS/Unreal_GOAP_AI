@@ -26,7 +26,7 @@ bool UActionTest::IsRunning() const
 	return isRunning;
 }
 
-void UActionTest::Execute_Implementation(AAIController * aiController) {}
+void UActionTest::Execute_Implementation(AAIController * AiController, UWorldStateManager * WorldStateManager) {}
 
 bool UActionTest::OperableOn(const WorldState_Internal& i_worldState)
 {

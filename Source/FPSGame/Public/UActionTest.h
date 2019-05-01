@@ -17,6 +17,7 @@ enum class EStatusEnum : uint8
 };
 
 class AAIController;
+class UWorldStateManager;
 
 /**
  * 
@@ -34,7 +35,7 @@ public:
 	bool IsRunning() const;
 
 	UFUNCTION(BlueprintNativeEvent)
-	void Execute(AAIController * aiController);
+	void Execute(AAIController * AiController, UWorldStateManager * WorldStateManager);
 
 	/**
 		Compare given world state against precondition,
