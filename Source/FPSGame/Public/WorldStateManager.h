@@ -8,7 +8,7 @@
 
 class UWorldState;
 
-UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+UCLASS( Blueprintable, ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class FPSGAME_API UWorldStateManager : public UActorComponent
 {
 	GENERATED_BODY()
@@ -29,6 +29,18 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void AddBooleanToBlackboard(const FString& Name, bool Value);
 
+	UFUNCTION(BlueprintCallable)
+	FVector GetPositionFromBlackboard(const FString& Name) const { return *(m_vectors.Find(Name)); }
+
+	UFUNCTION(BlueprintCallable)
+	int GetIntegerFromBlackboard(const FString& Name) const { return *(m_integers.Find(Name)); }
+
+	UFUNCTION(BlueprintCallable)
+	FRotator GetRotatorFromBlackboard(const FString& Name) const { return *(m_rotators.Find(Name)); }
+
+	UFUNCTION(BlueprintCallable)
+	bool GetBooleanFromBlackboard(const FString& Name) const { return *(m_booleans.Find(Name)); }
+
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
@@ -37,8 +49,13 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
+	UFUNCTION(BlueprintCallable)
+		void InitializeCurrentWorldState(UWorldState* CurrentWorldState) { this->CurrentWorldState = CurrentWorldState; }
+
+	UPROPERTY(BlueprintReadOnly)
+	UWorldState* CurrentWorldState;
+
 protected:
-	UWorldState* m_pCurrentWorldState;
 
 	TMap<FString, FVector> m_vectors;
 	TMap<FString, int> m_integers;

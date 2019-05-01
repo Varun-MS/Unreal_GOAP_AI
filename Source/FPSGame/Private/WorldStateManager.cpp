@@ -68,7 +68,7 @@ void UWorldStateManager::TickComponent(float DeltaTime, ELevelTick TickType, FAc
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	for (auto keyValuePair : (m_pCurrentWorldState->WorldStateDefiners))
+	for (auto keyValuePair : (CurrentWorldState->WorldStateDefiners))
 	{
 		keyValuePair.Value->ReevaluateDefiner();
 	}

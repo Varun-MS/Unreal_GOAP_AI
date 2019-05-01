@@ -8,6 +8,7 @@
 #include "WorldState.generated.h"
 
 class UWorldStateDefiner;
+class ACharacter;
 
 /**
  * 
@@ -23,25 +24,25 @@ public:
 	~UWorldState();
 
 	UFUNCTION(BlueprintCallable, Category = "World State")
-	void AddWorldStateDefiner(int VariableCode, bool Value, const FString& DebugName);
+	void AddWorldStateDefiner(uint8 VariableCode, bool Value, const FString& DebugName);
 
 	UFUNCTION(BlueprintCallable, Category = "World State")
 	void SetName(const FString& Name);
 
 	UFUNCTION(BlueprintCallable, Category = "World State")
-	bool GetWorldStateDefiner(int VariableCode);
+	bool GetWorldStateDefiner(uint8 VariableCode);
 
 	UFUNCTION(BlueprintCallable, Category = "World State")
 	FString GetName() { return HumanReadableName; }
 
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "World State")
-	bool IsViable();
+	bool IsViable(ACharacter* AICharacter);
 
 	int DistanceTo(TWeakObjectPtr<UWorldState> i_otherState) const;
 	int DistanceTo(const UWorldState& i_otherState) const;
 
 	UPROPERTY(BlueprintReadWrite)
-	TMap<int, UWorldStateDefiner*> WorldStateDefiners;
+	TMap<uint8, UWorldStateDefiner*> WorldStateDefiners;
 	
 	UPROPERTY(BlueprintReadWrite)
 	FString HumanReadableName;

@@ -33,11 +33,11 @@ void UGoalManager::TickComponent(float DeltaTime, ELevelTick TickType, FActorCom
 	// ...
 }
 
-UWorldState* UGoalManager::GetNewGoal() const
+UWorldState* UGoalManager::GetNewGoal(ACharacter* AICharacter) const
 {
 	for(auto goal : m_goals)
 	{
-		if (goal->IsViable())
+		if (goal->IsViable(AICharacter))
 			return goal;
 	}
 

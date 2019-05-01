@@ -9,7 +9,7 @@ UWorldState::UWorldState()
 UWorldState::~UWorldState()
 {}
 
-void UWorldState::AddWorldStateDefiner(int VariableCode, bool Value, const FString& DebugName = "Uninitialized")
+void UWorldState::AddWorldStateDefiner(uint8 VariableCode, bool Value, const FString& DebugName = "Uninitialized")
 {
 	if (WorldStateDefiners.Contains(VariableCode))
 	{
@@ -30,7 +30,7 @@ void UWorldState::SetName(const FString& Name)
 	HumanReadableName = Name;
 }
 
-bool UWorldState::GetWorldStateDefiner(int VariableCode)
+bool UWorldState::GetWorldStateDefiner(uint8 VariableCode)
 {
 	auto result = WorldStateDefiners.Find(VariableCode);
 
