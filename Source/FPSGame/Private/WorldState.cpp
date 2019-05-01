@@ -9,19 +9,15 @@ UWorldState::UWorldState()
 UWorldState::~UWorldState()
 {}
 
-void UWorldState::AddWorldStateDefiner(uint8 VariableCode, bool Value, const FString& DebugName = "Uninitialized")
+void UWorldState::AddWorldStateDefiner(uint8 VariableCode, UWorldStateDefiner* WorldStateDefiner)
 {
 	if (WorldStateDefiners.Contains(VariableCode))
 	{
-		WorldStateDefiners[VariableCode]->IsTrue = Value;
+		WorldStateDefiners[VariableCode]->IsTrue = WorldStateDefiner->IsTrue;
 	}
 	else
 	{
-		UWorldStateDefiner* pNewDefiner = NewObject<UWorldStateDefiner>();
-		pNewDefiner->ID = VariableCode;
-		pNewDefiner->IsTrue = Value;
-		pNewDefiner->DebugName = DebugName;
-		WorldStateDefiners.Add(VariableCode, pNewDefiner);
+		WorldStateDefiners.Add(VariableCode, WorldStateDefiner);
 	}
 }
 
@@ -30,15 +26,15 @@ void UWorldState::SetName(const FString& Name)
 	HumanReadableName = Name;
 }
 
-bool UWorldState::GetWorldStateDefiner(uint8 VariableCode)
+UWorldStateDefiner* UWorldState::GetWorldStateDefiner(uint8 VariableCode)
 {
 	auto result = WorldStateDefiners.Find(VariableCode);
 
 	if (result == nullptr)
-		return false;
+		return nullptr;
 
 	else
-		return (*result)->IsTrue;
+		return (*result);
 }
 
 int UWorldState::DistanceTo(TWeakObjectPtr<UWorldState> i_otherState) const

@@ -24,19 +24,19 @@ public:
 	~UWorldState();
 
 	UFUNCTION(BlueprintCallable, Category = "World State")
-	void AddWorldStateDefiner(uint8 VariableCode, bool Value, const FString& DebugName);
+	void AddWorldStateDefiner(uint8 VariableCode, UWorldStateDefiner* WorldStateDefiner);
 
 	UFUNCTION(BlueprintCallable, Category = "World State")
 	void SetName(const FString& Name);
 
 	UFUNCTION(BlueprintCallable, Category = "World State")
-	bool GetWorldStateDefiner(uint8 VariableCode);
+	UWorldStateDefiner* GetWorldStateDefiner(uint8 VariableCode);
 
 	UFUNCTION(BlueprintCallable, Category = "World State")
 	FString GetName() { return HumanReadableName; }
 
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "World State")
-	bool IsViable(ACharacter* AICharacter);
+	bool IsViable();
 
 	int DistanceTo(TWeakObjectPtr<UWorldState> i_otherState) const;
 	int DistanceTo(const UWorldState& i_otherState) const;
