@@ -7,7 +7,7 @@
 #include "GoalManager.generated.h"
 
 class UWorldState;
-class ACharacter;
+class UWorldStateManager;
 
 UCLASS( Blueprintable, ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class FPSGAME_API UGoalManager : public UActorComponent
@@ -27,7 +27,7 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 	
 	UFUNCTION(BlueprintCallable, Category = "Goal Manager")
-	UWorldState* GetNewGoal(ACharacter* AICharacter) const;
+	UWorldState* GetNewGoal(UWorldStateManager* WorldStateManager) const;
 
 	UFUNCTION(BlueprintCallable, Category = "Goal Manager")
 	void AddGoal(UWorldState* Goal);
@@ -36,5 +36,6 @@ public:
 	const TArray<UWorldState*>& GetAllGoals() const;
 
 protected:
+	UPROPERTY(BlueprintReadWrite)
 	TArray<UWorldState*> m_goals;
 };

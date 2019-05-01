@@ -2,6 +2,7 @@
 
 #include "GoalManager.h"
 #include "WorldState.h"
+#include "WorldStateManager.h"
 
 
 // Sets default values for this component's properties
@@ -33,11 +34,11 @@ void UGoalManager::TickComponent(float DeltaTime, ELevelTick TickType, FActorCom
 	// ...
 }
 
-UWorldState* UGoalManager::GetNewGoal(ACharacter* AICharacter) const
+UWorldState* UGoalManager::GetNewGoal(UWorldStateManager* WorldStateManager) const
 {
 	for(auto goal : m_goals)
 	{
-		if (goal->IsViable())
+		if (goal->IsViable(WorldStateManager))
 			return goal;
 	}
 

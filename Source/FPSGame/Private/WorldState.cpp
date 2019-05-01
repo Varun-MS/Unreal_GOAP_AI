@@ -2,6 +2,7 @@
 
 #include "WorldState.h"
 #include "WorldStateDefiner.h"
+#include "WorldStateManager.h"
 
 UWorldState::UWorldState()
 {}

@@ -8,7 +8,7 @@
 #include "WorldState.generated.h"
 
 class UWorldStateDefiner;
-class ACharacter;
+class UWorldStateManager;
 
 /**
  * 
@@ -36,7 +36,7 @@ public:
 	FString GetName() { return HumanReadableName; }
 
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "World State")
-	bool IsViable();
+	bool IsViable(UWorldStateManager* WorldStateManager);
 
 	int DistanceTo(TWeakObjectPtr<UWorldState> i_otherState) const;
 	int DistanceTo(const UWorldState& i_otherState) const;
