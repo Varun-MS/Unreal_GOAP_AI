@@ -9,6 +9,16 @@
 
 #include "AIController_Goap.generated.h"
 
+//UENUM(BlueprintType)		//"BlueprintType" is essential to include
+//enum class EWorldStateEnum : uint8
+//{
+//	VE_HasLowHealth 	    UMETA(DisplayName = "HasLowHealth"),
+//	VE_HasWeapon 			UMETA(DisplayName = "HasWeapon"),
+//	VE_HasAmmo				UMETA(DisplayName = "HasAmmo"),
+//	VE_IsEnemyVisible	    UMETA(DisplayName = "IsEnemyVisible"),
+//	VE_IsEnemyDead          UMETA(DisplayName = "IsEnemyDead"),
+//};
+
 /**
  * 
  */
@@ -21,13 +31,16 @@ public:
 	void BeginPlay() override;
 
 private:
-	UPROPERTY()
-		TArray<AActor*> waypoints;
-
 	UFUNCTION(BlueprintCallable)
 		ATargetPoint* GetRandomWaypoint();
 
 	UFUNCTION(BlueprintCallable)
 		void GoToRandomWaypoint();
-	
+
+	// Member Variables
+	//------
+
+private:
+	UPROPERTY()
+		TArray<AActor*> waypoints;
 };

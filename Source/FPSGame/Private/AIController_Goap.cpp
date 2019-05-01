@@ -27,3 +27,4 @@ void AAIController_Goap::GoToRandomWaypoint()
 {
 	MoveToActor(GetRandomWaypoint());
 }
+
