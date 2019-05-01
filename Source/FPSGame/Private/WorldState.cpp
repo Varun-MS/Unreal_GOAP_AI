@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "WorldState.h"
+#include "WorldStateDefiner.h"
 
 UWorldState::UWorldState()
 {}
@@ -8,12 +9,20 @@ UWorldState::UWorldState()
 UWorldState::~UWorldState()
 {}
 
-void UWorldState::AddWorldStateVariable(int VariableCode, bool Value)
+void UWorldState::AddWorldStateDefiner(int VariableCode, bool Value, const FString& DebugName = "Uninitialized")
 {
-	if (WorldStateVariables.Contains(VariableCode))
-		WorldStateVariables[VariableCode] = Value;
+	if (WorldStateDefiners.Contains(VariableCode))
+	{
+		WorldStateDefiners[VariableCode]->IsTrue = Value;
+	}
 	else
-		WorldStateVariables.Add(VariableCode, Value);
+	{
+		UWorldStateDefiner* pNewDefiner = NewObject<UWorldStateDefiner>();
+		pNewDefiner->ID = VariableCode;
+		pNewDefiner->IsTrue = Value;
+		pNewDefiner->DebugName = DebugName;
+		WorldStateDefiners.Add(VariableCode, pNewDefiner);
+	}
 }
 
 void UWorldState::SetName(const FString& Name)
@@ -21,26 +30,26 @@ void UWorldState::SetName(const FString& Name)
 	HumanReadableName = Name;
 }
 
-bool UWorldState::GetWorldStateVariable(int VariableCode)
+bool UWorldState::GetWorldStateDefiner(int VariableCode)
 {
-	auto result = WorldStateVariables.Find(VariableCode);
+	auto result = WorldStateDefiners.Find(VariableCode);
 
 	if (result == nullptr)
 		return false;
 
 	else
-		return *result;
+		return (*result)->IsTrue;
 }
 
 int UWorldState::DistanceTo(TWeakObjectPtr<UWorldState> i_otherState) const
 {
 	int result = 0;
 
-	for (const auto& keyValuePair : WorldStateVariables) 
+	for (const auto& keyValuePair : WorldStateDefiners) 
 	{
-		auto lookupResult = i_otherState->WorldStateVariables.Find(keyValuePair.Key);
+		auto lookupResult = i_otherState->WorldStateDefiners.Find(keyValuePair.Key);
 		
-		if (lookupResult == nullptr || *(lookupResult) != keyValuePair.Value) 
+		if (lookupResult == nullptr || (**lookupResult) != (*keyValuePair.Value)) 
 		{
 			result++;
 		}
@@ -53,11 +62,11 @@ int UWorldState::DistanceTo(const UWorldState& i_otherState) const
 {
 	int result = 0;
 
-	for (const auto& keyValuePair : WorldStateVariables)
+	for (const auto& keyValuePair : WorldStateDefiners)
 	{
-		auto lookupResult = i_otherState.WorldStateVariables.Find(keyValuePair.Key);
+		auto lookupResult = i_otherState.WorldStateDefiners.Find(keyValuePair.Key);
 
-		if (lookupResult == nullptr || *(lookupResult) != keyValuePair.Value)
+		if (lookupResult == nullptr || (**lookupResult) != (*keyValuePair.Value))
 		{
 			result++;
 		}
