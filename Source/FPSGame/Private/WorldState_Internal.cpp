@@ -3,6 +3,7 @@
 #include "WorldState_Internal.h"
 
 #include "WorldState.h"
+#include "WorldStateDefiner.h"
 
 WorldState_Internal::WorldState_Internal()
 {
@@ -10,9 +11,9 @@ WorldState_Internal::WorldState_Internal()
 
 WorldState_Internal::WorldState_Internal(UWorldState* i_UWorldState)
 {
-	for(auto keyValuePair : i_UWorldState->WorldStateVariables)
+	for(auto keyValuePair : i_UWorldState->WorldStateDefiners)
 	{
-		m_worldStateVariables.insert(std::make_pair(keyValuePair.Key, keyValuePair.Value));
+		m_worldStateVariables.insert(std::make_pair(keyValuePair.Key, keyValuePair.Value->IsTrue));
 	}
 	
 	m_humanReadableName = TCHAR_TO_UTF8(*(i_UWorldState->HumanReadableName));
