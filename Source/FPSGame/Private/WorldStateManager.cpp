@@ -3,6 +3,7 @@
 #include "WorldStateManager.h"
 #include "WorldStateDefiner.h"
 #include "WorldState.h"
+#include "Runtime/Engine/Classes/GameFramework/Character.h"
 
 UWorldStateManager::UWorldStateManager()
 {
@@ -67,10 +68,13 @@ void UWorldStateManager::BeginPlay()
 void UWorldStateManager::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+}
 
+void UWorldStateManager::RecalculateWorldState(ACharacter* Character)
+{
 	for (auto keyValuePair : (CurrentWorldState->WorldStateDefiners))
 	{
-		keyValuePair.Value->ReevaluateDefiner();
+		keyValuePair.Value->ReevaluateDefiner(Character);
 	}
 }
 

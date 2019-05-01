@@ -7,6 +7,7 @@
 #include "WorldStateManager.generated.h"
 
 class UWorldState;
+class ACharacter;
 
 UCLASS( Blueprintable, ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class FPSGAME_API UWorldStateManager : public UActorComponent
@@ -50,7 +51,10 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	UFUNCTION(BlueprintCallable)
-		void InitializeCurrentWorldState(UWorldState* CurrentWorldState) { this->CurrentWorldState = CurrentWorldState; }
+	void InitializeCurrentWorldState(UWorldState* CurrentWorldState) { this->CurrentWorldState = CurrentWorldState; }
+
+	UFUNCTION(BlueprintCallable)
+	void RecalculateWorldState(ACharacter* Character);
 
 	UPROPERTY(BlueprintReadOnly)
 	UWorldState* CurrentWorldState;

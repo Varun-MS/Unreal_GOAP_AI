@@ -37,7 +37,7 @@ UWorldState* UGoalManager::GetNewGoal(ACharacter* AICharacter) const
 {
 	for(auto goal : m_goals)
 	{
-		if (goal->IsViable(AICharacter))
+		if (goal->IsViable())
 			return goal;
 	}
 

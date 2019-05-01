@@ -7,6 +7,8 @@
 
 #include "WorldStateDefiner.generated.h"
 
+class ACharacter;
+
 /**
  * 
  */
@@ -20,10 +22,15 @@ public:
 	~UWorldStateDefiner();
 
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
-	bool ReevaluateDefiner();
+	bool ReevaluateDefiner(ACharacter* Character);
 
+	UPROPERTY(EditAnywhere, BluePrintReadWrite)
 	FString DebugName;
+	
+	UPROPERTY(EditAnywhere, BluePrintReadWrite)
 	int ID;
+
+	UPROPERTY(EditAnywhere, BluePrintReadWrite)
 	bool IsTrue;
 };
 
